@@ -1,9 +1,10 @@
 streamlit
 langchain
 langchain-community
+langchain-core
+langchain-text-splitters
 langchain-google-genai
 langchain-huggingface
-langchain-text-splitters
 faiss-cpu
 pypdf
 gdown

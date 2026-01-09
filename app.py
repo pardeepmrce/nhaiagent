@@ -2,17 +2,43 @@ import streamlit as st
 import os
 import gdown
 import shutil
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import PyPDFLoader, TextLoader
+import gc
+
+# --- BULLETPROOF IMPORTS ---
+try:
+    from langchain_google_genai import ChatGoogleGenerativeAI
+except ImportError:
+    from langchain.chat_models import ChatGoogleGenerativeAI
+
+try:
+    from langchain_huggingface import HuggingFaceEmbeddings
+except ImportError:
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+
+try:
+    from langchain_community.vectorstores import FAISS
+except ImportError:
+    from langchain.vectorstores import FAISS
+
+try:
+    from langchain_community.document_loaders import PyPDFLoader, TextLoader
+except ImportError:
+    from langchain.document_loaders import PyPDFLoader, TextLoader
+
+# The problem lines you faced earlier:
 try:
     from langchain_text_splitters import RecursiveCharacterTextSplitter
 except ImportError:
     from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.chains import RetrievalQA
+
+try:
+    from langchain.chains import RetrievalQA
+except ImportError:
+    # Fallback for very new/old mix-ups
+    from langchain.chains.retrieval_qa.base import RetrievalQA
+
 from langchain.prompts import PromptTemplate
-import gc
+# ---------------------------
 
 # --- CONFIGURATION ---
 BATCH_SIZE = 50  # Process 50 pages at a time to prevent RAM crashes
